@@ -1,6 +1,5 @@
 import { fetchNoteById } from '@/lib/api';
-import Modal from '@/components/Modal/Modal';
-import NoteDetailsClient from '@/app/notes/[id]/NoteDetails.client';
+import NotePreviewClient from './NotePreview.client';
 
 interface NotePreviewProps {
   params: Promise<{ id: string }>;
@@ -10,13 +9,11 @@ const NotePreview = async ({ params }: NotePreviewProps) => {
   const { id } = await params;
   const note = await fetchNoteById(id);
 
-  if (!note) return;
+  if (!note) return null;
 
   return (
     <>
-      <Modal>
-        <NoteDetailsClient />
-      </Modal>
+      <NotePreviewClient />
     </>
   );
 };

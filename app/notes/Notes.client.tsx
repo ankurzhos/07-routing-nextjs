@@ -72,7 +72,7 @@ export default function NotesClient() {
       {notes.length > 0 && <NoteList notes={notes} />}
 
       {isOpen && (
-        <Modal>
+        <Modal onClose={() => setIsOpen(false)}>
           <NoteForm onClose={() => setIsOpen(false)} />
         </Modal>
       )}
