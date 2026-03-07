@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useDebouncedCallback } from 'use-debounce';
-import { useParams } from 'next/navigation';
 
 import { fetchNotes } from '@/lib/api';
 import NoteList from '@/components/NoteList/NoteList';
@@ -12,28 +11,20 @@ import Pagination from '@/components/Pagination/Pagination';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import Modal from '@/components/Modal/Modal';
 
-import { NOTE_TAGS, NoteTag } from '@/types/note';
+import { NoteTag } from '@/types/note';
 
 import css from '@/app/notes/NotesPage.module.css';
 
 const PER_PAGE = 12;
 
-export default function NotesClient() {
-  const params = useParams();
-  const slug = params?.slug as string[] | undefined;
+interface NotesClientProps {
+  tag?: NoteTag;
+}
 
+export default function NotesClient({ tag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-
-  const filterValue = slug?.[0];
-
-  const tag: NoteTag | undefined =
-    filterValue === 'all'
-      ? undefined
-      : NOTE_TAGS.includes(filterValue as NoteTag)
-        ? (filterValue as NoteTag)
-        : undefined;
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value.trim());

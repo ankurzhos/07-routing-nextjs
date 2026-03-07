@@ -4,12 +4,16 @@ import { useRouter } from 'next/navigation';
 import Modal from '@/components/Modal/Modal';
 import NoteDetailsClient from '@/app/notes/[id]/NoteDetails.client';
 
-export default function NotePreviewClient() {
+interface NotePreviewClientProps {
+  id: string;
+}
+
+export default function NotePreviewClient({ id }: NotePreviewClientProps) {
   const router = useRouter();
 
   return (
     <Modal onClose={() => router.back()}>
-      <NoteDetailsClient />
+      <NoteDetailsClient id={id} />
     </Modal>
   );
 }

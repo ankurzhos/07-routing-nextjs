@@ -19,30 +19,31 @@ async function FilteredNotesPage({ params }: FilteredNotesPageProps) {
     notFound();
   }
 
+  let tag: NoteTag | undefined;
+  if (filterValue === 'all') {
+    tag = undefined;
+  } else if (NOTE_TAGS.includes(filterValue as NoteTag)) {
+    tag = filterValue as NoteTag;
+  } else {
+    notFound();
+  }
+
   await queryClient.prefetchQuery({
-    queryKey: ['notes', '', 1],
+    queryKey: ['notes', tag, '', 1],
     queryFn: () =>
       fetchNotes({
         page: 1,
         perPage: PER_PAGE,
         search: '',
+        tag,
       }),
   });
 
   const dehydratedState = dehydrate(queryClient);
 
-  const tag: NoteTag | undefined =
-    filterValue === 'all'
-      ? undefined
-      : NOTE_TAGS.includes(filterValue as NoteTag)
-        ? (filterValue as NoteTag)
-        : notFound();
-
-  await fetchNotes({ page: 1, perPage: 12, search: '', tag });
-
   return (
     <HydrationBoundary state={dehydratedState}>
-      <NotesClient />
+      <NotesClient tag={tag} />
     </HydrationBoundary>
   );
 }
