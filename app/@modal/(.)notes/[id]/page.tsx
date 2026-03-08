@@ -11,10 +11,12 @@ const NotePreview = async ({ params }: NotePreviewProps) => {
   const { id } = await params;
   const queryClient = new QueryClient();
 
-  const note = await queryClient.fetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: ['note', id],
     queryFn: () => fetchNoteById(id),
   });
+
+  const note = queryClient.getQueryData(['note', id]);
 
   if (!note) {
     notFound();
